@@ -1,0 +1,114 @@
+
+services:
+ 
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+    expose:
+      - "3306"
+    secrets:
+     - db_password
+     - db_root_password
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+ 
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    image: wordpress
+    container_name: wordpress
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+      - redis
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    expose:
+      - "9000"
+    secrets:
+      - db_password
+      - wp_user_password
+      - wp_admin_password
+ 
+  nginx:
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    ports:
+      - "443:443"
+
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+  
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis
+    restart: always
+    expose:
+      - "6379"
+    networks:
+      - inception
+    
+ 
+networks:
+  inception:
+    driver: bridge
+ 
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/wordpress
+
+secrets:
+  db_password:
+    file: ../secrets/db_password
+  db_root_password:
+    file: ../secrets/db_root_password
+  wp_user_password:
+    file: ../secrets/wp_user_password
+  wp_admin_password:
+    file: ../secrets/wp_admin_password

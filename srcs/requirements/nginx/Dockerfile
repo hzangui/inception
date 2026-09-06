@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
@@ -12,4 +12,3 @@ RUN chmod +x /usr/local/bin/generate_cert.sh
 EXPOSE 443
 
 ENTRYPOINT ["/usr/local/bin/generate_cert.sh"]
-CMD ["nginx", "-g", "daemon off;"]

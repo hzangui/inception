@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends mariadb-server && \
@@ -13,4 +13,4 @@ RUN chmod +x /usr/local/bin/setup.sh && \
 
 EXPOSE 3306
 
-ENTRYPOINT ["setup.sh"]
+ENTRYPOINT ["/usr/local/bin/setup.sh"]

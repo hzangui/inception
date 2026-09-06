@@ -1,19 +1,18 @@
 #!/bin/bash
 set -e
 
+MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+MYSQL_PASSWORD=$(cat /run/secrets/db_password)
+
+
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-    echo "[setup.sh] No existing database found — initializing..."
+    echo "[setup.sh] Initializing database directory..."
     mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 fi
 
-# Start MariaDB temporarily to (re)apply config, every boot
-mysqld_safe --datadir=/var/lib/mysql --skip-networking &
-
-until mysqladmin ping --silent; do
-    sleep 1
-done
-
-mysql -u root <<-EOSQL
+echo "[setup.sh] Applying database and credentials..."
+mysqld --user=mysql --datadir=/var/lib/mysql --bootstrap << EOSQL
+    FLUSH PRIVILEGES;
     CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
     CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
     ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
@@ -22,7 +21,5 @@ mysql -u root <<-EOSQL
     FLUSH PRIVILEGES;
 EOSQL
 
-mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
-
 echo "[setup.sh] Starting MariaDB in foreground..."
-exec mysqld_safe --datadir=/var/lib/mysql
+exec mysqld --user=mysql --datadir=/var/lib/mysql
