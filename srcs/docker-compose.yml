@@ -115,7 +115,15 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-    
+  
+  static_site:
+    container_name: static_site
+    build: ./requirements/bonus/static_site
+    restart: always
+    ports:
+      - "9090:9090"
+    networks:
+      - inception
  
 networks:
   inception:

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Inception Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>My Inception Project</h1>
+        <p>A simple Docker infrastructure project</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>What is Inception?</h2>
+            <p>
+                Inception is a project where we build a small web infrastructure
+                using Docker containers.
+            </p>
+        </section>
+
+        <section>
+            <h2>Services</h2>
+
+            <div class="services">
+                <div class="service">
+                    <h3>Nginx</h3>
+                    <p>Receives HTTPS requests from the browser.</p>
+                </div>
+
+                <div class="service">
+                    <h3>WordPress</h3>
+                    <p>Runs the website and generates web pages.</p>
+                </div>
+
+                <div class="service">
+                    <h3>MariaDB</h3>
+                    <p>Stores the WordPress data in a database.</p>
+                </div>
+
+                <div class="service">
+                    <h3>Redis</h3>
+                    <p>Stores frequently used data in memory.</p>
+                </div>
+
+                <div class="service">
+                    <h3>Adminer</h3>
+                    <p>manage databases in graphical interface.</p>
+                </div>
+
+                <div class="service">
+                    <h3>Cadvisor</h3>
+                    <p>check usage of resoureces of containers.</p>
+                </div>
+
+                <div class="service">
+                    <h3>FTP</h3>
+                    <p>Allows files to be transferred to the server.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>How it works</h2>
+            <p class="flow">
+                Browser → Nginx → WordPress → MariaDB
+            </p>
+            <p>
+                Each service runs in its own Docker container and the containers
+                communicate through a Docker network.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Inception Project - 42</p>
+    </footer>
+
+</body>
+</html>
