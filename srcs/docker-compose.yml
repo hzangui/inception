@@ -83,6 +83,38 @@ services:
       - "6379"
     networks:
       - inception
+  
+  ftp:
+    container_name: ftp
+    build: ./requirements/bonus/ftp
+    restart: always
+    ports:
+      - 21:21
+      - 21000-21010:21000-21010
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    env_file: .env
+    secrets:
+      - ftp_password
+    depends_on:
+      - wordpress
+  
+  cadvisor:
+    container_name: cadvisor
+    build: ./requirements/bonus/cadvisor
+    restart: always
+    ports:
+      - "9080:9080"
+    networks:
+      - inception
+    env_file: .env
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     
  
 networks:
@@ -111,4 +143,6 @@ secrets:
   wp_user_password:
     file: ../secrets/wp_user_password
   wp_admin_password:
+    file: ../secrets/wp_admin_password
+  ftp_password:
     file: ../secrets/wp_admin_password
