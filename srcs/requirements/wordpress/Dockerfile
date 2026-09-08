@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y \
     php8.2-mbstring \
     php8.2-xml \
     php8.2-zip \
-    wget \
     curl \
     mariadb-client \
     && rm -rf /var/lib/apt/lists/*
@@ -18,7 +17,9 @@ RUN curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-
     && chmod +x /usr/local/bin/wp
 
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
+
 COPY tools/setup_wordpress.sh /usr/local/bin/setup_wordpress.sh
+
 RUN chmod +x /usr/local/bin/setup_wordpress.sh
 
 WORKDIR /var/www/html

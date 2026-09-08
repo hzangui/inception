@@ -5,10 +5,6 @@ MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 MYSQL_PASSWORD=$(cat /run/secrets/db_password)
 
 
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-    echo "[setup.sh] Initializing database directory..."
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
-fi
 
 echo "[setup.sh] Applying database and credentials..."
 mysqld --user=mysql --datadir=/var/lib/mysql --bootstrap << EOSQL

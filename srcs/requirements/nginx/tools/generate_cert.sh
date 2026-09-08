@@ -13,8 +13,6 @@ openssl req -x509 -nodes -days 365 \
 
 nginx -t
 
-echo "ssl generated..."
-
 echo "run nginx ..."
 
 exec nginx -g "daemon off;"

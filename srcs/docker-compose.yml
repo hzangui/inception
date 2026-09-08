@@ -18,12 +18,12 @@ services:
     secrets:
      - db_password
      - db_root_password
-    healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "--silent"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+    # healthcheck:
+    #   test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "--silent"]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 10s
  
   wordpress:
     build:
